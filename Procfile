@@ -1,1 +1,1 @@
-web: gunicorn breach.wsgi --log-file -
+web: gunicorn breach/breach.wsgi --log-file -
