@@ -1,28 +1,39 @@
 import random
 import string
 from rest_framework import serializers
-from .models import Journey, Place, User, Voucher
+from .models import Journey, Place, User, Voucher,PlaceJourneyStatus
 
 class PlaceSerializer(serializers.ModelSerializer):
   class Meta:
     model = Place
     fields = ('id','name','description', 'location', 'image_url', 'is_halal')
 
+class PlaceJourneyStatusSerializer(serializers.ModelSerializer):
+  class Meta:
+    model = PlaceJourneyStatus
+    fields = ('id','place', 'is_visited')
+
+class PlaceJourneyStatusDetailSerializer(serializers.ModelSerializer):
+  place = PlaceSerializer(many=False)
+  class Meta:
+    model = PlaceJourneyStatus
+    fields = ('id','place', 'is_visited')
+    
 # Journey serializers 
 class JourneySerializer(serializers.ModelSerializer):
   place = serializers.PrimaryKeyRelatedField(many=True, queryset=Place.objects.all())
 
   class Meta:
     model = Journey
-    fields = ('id','title','author', 'duration', 'place' ,'image_url')
+    fields = ('id','title','author', 'duration', 'place', 'image_url', 'reward_category')
 
-# Journey serializers 
+
 class JourneyDetailSerializer(serializers.ModelSerializer):
-  place = PlaceSerializer(many=True)
-  
+  place_status = PlaceJourneyStatusDetailSerializer(many=True)
+
   class Meta:
     model = Journey
-    fields = ('id','title','author', 'duration', 'place' ,'image_url')
+    fields = ('id','title','author', 'duration', 'place_status' ,'image_url', 'reward_category')
 
 #voucher 
 class VoucherSerializer(serializers.ModelSerializer):

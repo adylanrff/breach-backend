@@ -5,8 +5,8 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework import mixins
-from journey.models import Journey, Place, Voucher, User
-from journey.serializers import JourneySerializer,JourneyDetailSerializer, PlaceSerializer, VoucherSerializer, UserSerializer, UserChangeSerializer
+from journey.models import Journey, Place, Voucher, User, PlaceJourneyStatus
+from journey.serializers import JourneySerializer,JourneyDetailSerializer, PlaceSerializer, VoucherSerializer, UserSerializer, UserChangeSerializer, PlaceJourneyStatusSerializer
 from rest_framework import viewsets
 
 class JourneyViewSet(viewsets.ModelViewSet):
@@ -15,15 +15,26 @@ class JourneyViewSet(viewsets.ModelViewSet):
 
   def get_serializer_class(self):
     if self.action == 'list':
-        return JourneyDetailSerializer
+      return JourneyDetailSerializer
     if self.action == 'retrieve':
-        return JourneyDetailSerializer
+      return JourneyDetailSerializer
     if self.action == 'create':
-        return JourneySerializer
+      return JourneySerializer
     if self.action == 'update':
-        return JourneySerializer
+      return JourneySerializer
     return JourneyDetailSerializer
-  
+
+  def perform_create(self, serializer):
+    data = serializer.data
+    places = data.pop('place')
+    journey = Journey.objects.create(**data)
+    for p in places:
+      place = Place.objects.get(pk=p)
+      place_status = PlaceJourneyStatus.objects.create(place=place)
+      journey.place_status.add(place_status)
+    journey.save()
+    return journey
+
 class PlaceViewSet(viewsets.ModelViewSet):
   queryset = Place.objects.all()
   serializer_class = PlaceSerializer
@@ -54,3 +65,7 @@ class UserViewSet(viewsets.ModelViewSet):
     if self.action == 'update':
         return UserChangeSerializer
     return UserSerializer
+
+class PlaceJourneyStatusViewSet(viewsets.ModelViewSet):
+  queryset = PlaceJourneyStatus.objects.all()
+  serializer_class = PlaceJourneyStatusSerializer

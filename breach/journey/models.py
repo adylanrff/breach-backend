@@ -12,15 +12,20 @@ class Place(models.Model):
   class Meta:
       ordering = ('created',)
 
+class PlaceJourneyStatus(models.Model):
+  place = models.ForeignKey(Place, on_delete=models.CASCADE)
+  is_visited = models.BooleanField(default=False)
+
 # Journey 
 class Journey(models.Model):
   created = models.DateTimeField(auto_now_add=True)
   title = models.CharField(max_length=200)
   author = models.CharField(max_length=200)
   duration = models.IntegerField()
-  place = models.ManyToManyField(Place)
+  place_status = models.ManyToManyField(PlaceJourneyStatus)
   image_url = models.CharField(max_length=200, null=True)
-  
+  reward_category = models.CharField(max_length=10, default="Bronze", choices=[("Bronze","Bronze"), ("Silver","Silver"), ("Gold","Gold"), ("Platinum","Platinum")])
+
   class Meta:
       ordering = ('created',)
 
@@ -42,7 +47,7 @@ class Voucher(models.Model):
   code = models.CharField(max_length=10)
   owner = models.ForeignKey(User, related_name='voucher', on_delete=models.CASCADE)
   image_url = models.CharField(max_length=200, null=True)
-  category = models.CharField(max_length=10, choices=[(0,"Bronze"), (1,"Silver"), (2,"Gold"), (3,"Platinum")])
+  category = models.CharField(max_length=10, default="Bronze", choices=[("Bronze","Bronze"), ("Silver","Silver"), ("Gold","Gold"), ("Platinum","Platinum")])
 
   class Meta:
       ordering = ('created',)
