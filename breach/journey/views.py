@@ -9,7 +9,11 @@ from journey.models import Journey, Place, Voucher, User, PlaceJourneyStatus
 from journey.serializers import JourneySerializer,JourneyDetailSerializer, PlaceSerializer, VoucherSerializer, UserSerializer, UserChangeSerializer, PlaceJourneyStatusSerializer
 from rest_framework import viewsets
 
-class JourneyViewSet(viewsets.ModelViewSet):
+class JourneyViewSet(mixins.ListModelMixin,
+                      mixins.CreateModelMixin,
+                      mixins.RetrieveModelMixin,
+                      mixins.DestroyModelMixin,
+                      viewsets.GenericViewSet):
   queryset = Journey.objects.all()
   serializer_class = JourneySerializer
 
@@ -20,8 +24,7 @@ class JourneyViewSet(viewsets.ModelViewSet):
       return JourneyDetailSerializer
     if self.action == 'create':
       return JourneySerializer
-    if self.action == 'update':
-      return JourneySerializer
+
     return JourneyDetailSerializer
 
   def perform_create(self, serializer):
