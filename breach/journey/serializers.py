@@ -6,7 +6,7 @@ from .models import Journey, Place, User, Voucher
 class PlaceSerializer(serializers.ModelSerializer):
   class Meta:
     model = Place
-    fields = ('id','name','description', 'location', 'image_url')
+    fields = ('id','name','description', 'location', 'image_url', 'is_halal')
 
 # Journey serializers 
 class JourneySerializer(serializers.ModelSerializer):

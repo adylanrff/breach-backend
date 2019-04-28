@@ -7,6 +7,7 @@ class Place(models.Model):
   description = models.TextField()
   location = models.TextField()
   image_url = models.CharField(max_length=200, null=True)
+  is_halal = models.BooleanField(default=True)
 
   class Meta:
       ordering = ('created',)
