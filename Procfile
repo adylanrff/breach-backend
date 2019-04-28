@@ -1,1 +1,1 @@
-web: python breach/manage.py runserver
+web: gunicorn breach.wsgi --log-file -
