@@ -7,18 +7,26 @@ class UserSerializer(serializers.ModelSerializer):
     model = User
     fields = ('id', 'name')
 
-# Journey serializers 
-class JourneySerializer(serializers.ModelSerializer):
-  place = serializers.PrimaryKeyRelatedField(many=True, queryset=Place.objects.all())
-  
-  class Meta:
-    model = Journey
-    fields = ('id','title','author', 'duration', 'place' ,'image_url')
-
 class PlaceSerializer(serializers.ModelSerializer):
   class Meta:
     model = Place
     fields = ('id','name','description', 'location', 'image_url')
+
+# Journey serializers 
+class JourneySerializer(serializers.ModelSerializer):
+  place = serializers.PrimaryKeyRelatedField(many=True, queryset=Place.objects.all())
+
+  class Meta:
+    model = Journey
+    fields = ('id','title','author', 'duration', 'place' ,'image_url')
+
+# Journey serializers 
+class JourneyDetailSerializer(serializers.ModelSerializer):
+  place = PlaceSerializer(many=True)
+  
+  class Meta:
+    model = Journey
+    fields = ('id','title','author', 'duration', 'place' ,'image_url')
 
 #voucher 
 class VoucherSerializer(serializers.ModelSerializer):
