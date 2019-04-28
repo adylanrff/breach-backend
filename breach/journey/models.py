@@ -41,6 +41,7 @@ class Voucher(models.Model):
   code = models.CharField(max_length=10)
   owner = models.ForeignKey(User, related_name='voucher', on_delete=models.CASCADE)
   image_url = models.CharField(max_length=200, null=True)
+  category = models.CharField(max_length=10, choices=[(0,"Bronze"), (1,"Silver"), (2,"Gold"), (3,"Platinum")])
 
   class Meta:
       ordering = ('created',)

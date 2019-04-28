@@ -29,7 +29,7 @@ class VoucherSerializer(serializers.ModelSerializer):
 
   class Meta:
     model = Voucher
-    fields = ('id', 'name', 'discount', 'description','code','image_url', 'owner')
+    fields = ('id', 'name', 'discount', 'description','code','image_url', 'category', 'owner')
     read_only_fields = ('code', )
     
 # User serializers
