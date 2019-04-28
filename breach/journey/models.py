@@ -28,7 +28,7 @@ class User(models.Model):
   created = models.DateTimeField(auto_now_add=True)
   name = models.CharField(max_length=200)
   journey = models.ManyToManyField(Journey)
-
+  
   class Meta:
       ordering = ('created',)
 
@@ -38,7 +38,9 @@ class Voucher(models.Model):
   name = models.CharField(max_length=200)
   discount = models.CharField(max_length=200)
   description = models.TextField()
-  owner = models.ForeignKey(User, related_name='vouchers', on_delete=models.CASCADE)
+  code = models.CharField(max_length=10)
+  owner = models.ForeignKey(User, related_name='voucher', on_delete=models.CASCADE)
+  image_url = models.CharField(max_length=200, null=True)
 
   class Meta:
       ordering = ('created',)
